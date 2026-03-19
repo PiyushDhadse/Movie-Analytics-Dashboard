@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { LayoutDashboard, Film, BarChart2, UploadCloud, LogOut } from "lucide-react";
+import { LayoutDashboard, Film, BarChart2, UploadCloud, LogOut,Bot } from "lucide-react";
 import { cn } from "@/lib/utils";
 
 const navItems = [
@@ -10,6 +10,7 @@ const navItems = [
   { name: "Movies", href: "/movies", icon: Film },
   { name: "Compare", href: "/compare", icon: BarChart2 },
   { name: "Upload Data", href: "/upload", icon: UploadCloud },
+  { name: "AI Analyzer", href: "/ai", icon: Bot },
 ];
 
 export default function Sidebar() {
