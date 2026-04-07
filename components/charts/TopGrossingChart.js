@@ -9,20 +9,33 @@ import {
   Tooltip,
   ResponsiveContainer,
 } from "recharts";
+import ChartSkeleton from "@/components/ChartSkeleton";
 import { getTopGrossing } from "@/services/api";
 
 export default function TopGrossingChart() {
   const [data, setData] = useState([]);
+  const [loading, setLoading] = useState(true);
   const [activeIndex, setActiveIndex] = useState(null);
 
   useEffect(() => {
     const fetchData = async () => {
-      const movies = await getTopGrossing();
-      setData(movies);
+      try {
+        const movies = await getTopGrossing();
+        setData(movies);
+      } catch (err) {
+        console.error("Failed to fetch top grossing movies:", err);
+      } finally {
+        setLoading(false);
+      }
     };
 
     fetchData();
   }, []);
+
+  if (loading) {
+    return <ChartSkeleton />;
+  }
+
 
   const CustomTooltip = ({ active, payload }) => {
     if (active && payload && payload.length) {
@@ -44,7 +57,7 @@ export default function TopGrossingChart() {
   };
 
   return (
-    <div className="w-full h-full min-h-80">
+    <div className="w-full h-full min-h-80 animate-in fade-in duration-700">
       <ResponsiveContainer width="100%" height="100%">
         <BarChart 
           data={data} 

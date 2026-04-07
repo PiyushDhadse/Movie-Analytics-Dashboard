@@ -12,18 +12,31 @@ import {
 } from "recharts";
 
 import { getGenrePopularity } from "@/services/api";
+import ChartSkeleton from "@/components/ChartSkeleton";
 
 export default function GenrePopularityChart() {
   const [data, setData] = useState([]);
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     const fetchData = async () => {
-      const genres = await getGenrePopularity();
-      setData(genres);
+      try {
+        const genres = await getGenrePopularity();
+        setData(genres);
+      } catch (err) {
+        console.error("Failed to fetch genre popularity data:", err);
+      } finally {
+        setLoading(false);
+      }
     };
 
     fetchData();
   }, []);
+
+  if (loading) {
+    return <ChartSkeleton />;
+  }
+
 
   const colors = ['#3b82f6', '#8b5cf6', '#ec4899', '#f43f5e', '#f97316', '#eab308'];
 
@@ -40,7 +53,7 @@ export default function GenrePopularityChart() {
   };
 
   return (
-    <div className="w-full h-full min-h-80">
+    <div className="w-full h-full min-h-80 animate-in fade-in duration-700">
       <ResponsiveContainer width="100%" height="100%">
         <BarChart data={data} margin={{ top: 20, right: 20, bottom: 60, left: 40 }}>
           <XAxis 

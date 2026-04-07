@@ -1,11 +1,9 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import TopGrossingChart from "@/components/charts/TopGrossingChart";
-import BudgetRevenueChart from "@/components/charts/BudgetRevenueChart";
-import GenrePopularityChart from "@/components/charts/GenrePopularityChart";
-import CorrelationHeatmap from "@/components/charts/CorrelationHeatmap";
+import dynamic from "next/dynamic";
 import StatCard from "@/components/StatCard";
+import ChartSkeleton from "@/components/ChartSkeleton";
 import {
   Film,
   UserSquare2,
@@ -15,6 +13,25 @@ import {
 } from "lucide-react";
 import axios from "axios";
 import Link from "next/link";
+
+// Dynamic imports for charts to improve loading performance
+const TopGrossingChart = dynamic(() => import("@/components/charts/TopGrossingChart"), {
+  ssr: false,
+  loading: () => <ChartSkeleton />
+});
+const BudgetRevenueChart = dynamic(() => import("@/components/charts/BudgetRevenueChart"), {
+  ssr: false,
+  loading: () => <ChartSkeleton />
+});
+const GenrePopularityChart = dynamic(() => import("@/components/charts/GenrePopularityChart"), {
+  ssr: false,
+  loading: () => <ChartSkeleton />
+});
+const CorrelationHeatmap = dynamic(() => import("@/components/charts/CorrelationHeatmap"), {
+  ssr: false,
+  loading: () => <ChartSkeleton />
+});
+
 
 export default function Home() {
   const [summary, setSummary] = useState(null);

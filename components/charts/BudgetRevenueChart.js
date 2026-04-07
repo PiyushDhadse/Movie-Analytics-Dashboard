@@ -13,18 +13,31 @@ import {
 } from "recharts";
 
 import { getBudgetRevenue } from "@/services/api";
+import ChartSkeleton from "@/components/ChartSkeleton";
 
 export default function BudgetRevenueChart() {
   const [data, setData] = useState([]);
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     const fetchData = async () => {
-      const movies = await getBudgetRevenue();
-      setData(movies);
+      try {
+        const movies = await getBudgetRevenue();
+        setData(movies);
+      } catch (err) {
+        console.error("Failed to fetch budget vs revenue data:", err);
+      } finally {
+        setLoading(false);
+      }
     };
 
     fetchData();
   }, []);
+
+  if (loading) {
+    return <ChartSkeleton />;
+  }
+
 
   const CustomTooltip = ({ active, payload }) => {
     if (active && payload && payload.length) {
@@ -40,7 +53,7 @@ export default function BudgetRevenueChart() {
   };
 
   return (
-    <div className="w-full h-full min-h-80">
+    <div className="w-full h-full min-h-80 animate-in fade-in duration-700">
       <ResponsiveContainer width="100%" height="100%">
         <ScatterChart margin={{ top: 20, right: 30, bottom: 25, left: 40 }}>
           <CartesianGrid stroke="#f1f5f9" strokeDasharray="none" vertical={false} />
